@@ -1,5 +1,5 @@
 import {useRef, useState, useEffect} from "react";
-import Web3Modal, { getThemeColors } from "web3Modal";
+import Web3Modal, { getThemeColors } from "web3modal";
 import Head from "next/head";
 import {providers, Contract, utils} from "ethers";
 import styles from '../styles/Home.module.css';
