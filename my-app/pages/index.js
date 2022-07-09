@@ -50,7 +50,6 @@ export default function Home() {
 
     const publicMint = async() => {
         try {
-            setLoading(true);
             const signer = await getProviderOrSigner(true)
             const nftContract = new Contract(
                 NFT_CONTRACT_ADDRESS,
@@ -60,12 +59,13 @@ export default function Home() {
             const txn = await nftContract.mint({
                 value:utils.parseEther("0.02"),
             });
+            setLoading(true);
             await txn.wait();
+            setLoading(false);
             window.alert("You have successfully minted Miku.")
         } catch (error) {
             console.error(error);
         }
-        setLoading(false);
     }
     const connectWallet = async() => {
         await getProviderOrSigner();
@@ -120,7 +120,12 @@ export default function Home() {
             const presaleEndTime = await nftContract.presaleEnded();
             const currentTimeInSeconds = Date.now()/1000;
             const hasPresaleEnded = presaleEndTime.lt(Math.floor(currentTimeInSeconds));
-            setPresaleEnded(hasPresaleEnded);
+            if(hasPresaleEnded){
+                setPresaleEnded(true);
+            }else{
+                setPresaleEnded(false);
+            }
+            console.log(hasPresaleEnded);
         } catch (error) {
             console.error(error);
         }
@@ -223,12 +228,14 @@ export default function Home() {
             )
         }
         if(presaleEnded){
-          <div>
+          return(
+            <div>
               <span className={styles.description}>
             Presale has ended, you can know mint Miku in public sale. 
             </span>
             <button className={styles.button} onClick={publicMint}>Public Mint</button>
           </div>
+          )
         }
     }
 
