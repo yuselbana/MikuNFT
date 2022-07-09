@@ -10,24 +10,27 @@ export default function Home() {
     const [presaleEnded, setPresaleEnded] = useState(false);
     const [walletConnected, setWalletConnected] = useState(false);
     const[loading, setLoading]= useState(false);
-    const[numTokensMinted,setNumTokensMinted] = useState("");
+    const[numTokensMinted,setNumTokensMinted] = useState("0");
     const web3ModalRef = useRef();
 
 
     const getNumMintedTokens = async() => {
-        try {
-            const provider = getProviderOrSigner();
-            const nftContract = new Contract(
-                NFT_CONTRACT_ADDRESS,
-                NFT_CONTRACT_ABI,
-                provider
-            );
-            const numTokenIds = await nftContract.totalID();
-            setNumTokensMinted(numTokenIds.toString());
-        } catch (error) {
-            console.error(error);
-        }
+          
+    try {
+      // Get the provider from web3Modal, which in our case is MetaMask
+      // No need for the Signer here, as we are only reading state from the blockchain
+      const provider = await getProviderOrSigner();
+      // We connect to the Contract using a Provider, so we will only
+      // have read-only access to the Contract
+      const nftContract = new Contract(NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI, provider);
+      // call the tokenIds from the contract
+      const _tokenIds = await nftContract.totalID();
+      //_tokenIds is a `Big Number`. We need to convert the Big Number to a string
+      setNumTokensMinted(_tokenIds.toString());
+    } catch (err) {
+      console.error(err);
     }
+  } 
     const presaleMint = async() => {
         try {
             setLoading(true);
@@ -40,6 +43,7 @@ export default function Home() {
             const txn = await nftContract.presaleMint({
                 value:utils.parseEther("0.01"),
             });
+            console.log(txn);
             await txn.wait();
             window.alert("You have successfully minted Miku.")
         } catch (error) {
@@ -50,7 +54,8 @@ export default function Home() {
 
     const publicMint = async() => {
         try {
-            const signer = await getProviderOrSigner(true)
+            setLoading(true);
+            const signer = await getProviderOrSigner(true);
             const nftContract = new Contract(
                 NFT_CONTRACT_ADDRESS,
                 NFT_CONTRACT_ABI,
@@ -59,18 +64,17 @@ export default function Home() {
             const txn = await nftContract.mint({
                 value:utils.parseEther("0.02"),
             });
-            setLoading(true);
             await txn.wait();
-            setLoading(false);
-            window.alert("You have successfully minted Miku.")
+            window.alert("You have successfully minted Miku.");
         } catch (error) {
             console.error(error);
         }
+        setLoading(false);
     }
     const connectWallet = async() => {
         await getProviderOrSigner();
         setWalletConnected(true);
-     };
+     }
 
     const startPresale = async() => {
         setLoading(true);
@@ -82,10 +86,11 @@ export default function Home() {
                 signer
             );
             const txn = await nftContract.startPresale();
+            
             await txn.wait();
             setPresaleStarted(true);
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
         setLoading(false);
     }
@@ -105,7 +110,7 @@ export default function Home() {
       setPresaleStarted(_presaleStarted);
       return _presaleStarted;
       } catch (error) {
-       console.error(error); 
+      console.error(error); 
        return false;
       }
     }
@@ -125,9 +130,8 @@ export default function Home() {
             }else{
                 setPresaleEnded(false);
             }
-            console.log(hasPresaleEnded);
         } catch (error) {
-            console.error(error);
+          console.error(error);
         }
     }
     const getOwner = async () => {
@@ -230,11 +234,9 @@ export default function Home() {
         if(presaleEnded){
           return(
             <div>
-              <span className={styles.description}>
-            Presale has ended, you can know mint Miku in public sale. 
-            </span>
-            <button className={styles.button} onClick={publicMint}>Public Mint</button>
-          </div>
+            <button onClick={publicMint} className={styles.button}>Public Mint</button>
+            </div>
+            
           )
         }
     }
@@ -250,7 +252,7 @@ export default function Home() {
         </div>
         <div className={styles.title}>
         Miku NFT Collection
-        <div className={styles.description}>{numTokensMinted}/20 have been minted already!</div>
+        <div className={styles.description}>{numTokensMinted}/50 have been minted already!</div>
         </div>
         
         

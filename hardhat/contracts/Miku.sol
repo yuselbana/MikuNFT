@@ -12,11 +12,11 @@ contract Miku is ERC721Enumerable, Ownable {
     uint256 public presaleEnded; 
     uint256 public maxID = 50;
     uint256 public totalID;
-    bool public paused;
+    bool public paused = true;
     uint256 public publicPrice = 0.02 ether;
     uint public presalePrice = 0.01 ether;
 
-    modifier notPaused{
+    modifier Paused{
         require(!paused,"Contract currently paused");
         _;
     }
@@ -25,10 +25,11 @@ contract Miku is ERC721Enumerable, Ownable {
         whiteList = Whitelist(whitelistContract);
     }
 function startPresale() public onlyOwner{
- isPresaleStarted = true;
- presaleEnded = block.timestamp + 5 minutes; 
+    paused = false; 
+    isPresaleStarted = true;
+    presaleEnded = block.timestamp + 1 minutes; 
 }
-function presaleMint() public payable notPaused {
+function presaleMint() public payable Paused {
     require(isPresaleStarted && block.timestamp < presaleEnded,"Presale has ended...");
     require(whiteList.whitelistedAddresses(msg.sender),"Not in whitelist...");
     require(totalID < maxID,"Excedeed max supply...");
@@ -36,7 +37,7 @@ function presaleMint() public payable notPaused {
     totalID +=1;
     _safeMint(msg.sender, totalID);
 } 
-function mint() public payable notPaused{
+function mint() public payable Paused{
 require(isPresaleStarted && block.timestamp >= presaleEnded,"Presale still in progress...");
 require(totalID < maxID,"Excedeed max supply...");
 require (msg.value >= publicPrice);
@@ -58,6 +59,6 @@ function withdraw() public onlyOwner{
     require(sent, "Failed to send...");
 }
 
-receive()external payable{}
+receive() external payable {}
 fallback() external payable{}
 }
