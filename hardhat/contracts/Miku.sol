@@ -12,7 +12,7 @@ contract Miku is ERC721Enumerable, Ownable {
     uint256 public presaleEnded; 
     uint256 public maxID = 50;
     uint256 public totalID;
-    bool public paused = true;
+    bool public paused = true; 
     uint256 public publicPrice = 0.02 ether;
     uint public presalePrice = 0.01 ether;
 

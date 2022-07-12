@@ -12,7 +12,7 @@ export default function Home() {
     const[loading, setLoading]= useState(false);
     const[numTokensMinted,setNumTokensMinted] = useState("0");
     const web3ModalRef = useRef();
-
+    
 
     const getNumMintedTokens = async() => {
           
@@ -201,7 +201,7 @@ export default function Home() {
     function renderBody() {
         if(!walletConnected){
             return(
-                <button onClick={connectWallet} className={styles.button}> Connect Wallet</button>
+                <button onClick={connectWallet} className={styles.button3}> Connect Wallet</button>
             );
         }
         if(loading){
@@ -227,14 +227,14 @@ export default function Home() {
                     <span className={styles.description}>
                         Presale has started, mint Miku!
                     </span>
-                    <button className={styles.button} onClick={presaleMint}>Presale Mint</button>
+                    <button className={styles.button3} onClick={presaleMint}>Presale Mint</button>
                 </div>
             )
         }
         if(presaleEnded){
           return(
             <div>
-            <button onClick={publicMint} className={styles.button}>Public Mint</button>
+            <button onClick={publicMint} className={styles.button3}>Public Mint</button>
             </div>
             
           )
@@ -247,14 +247,14 @@ export default function Home() {
         <Head>
         <title>Miku</title>
         </Head>
-        <div className={styles.main}>
-        {renderBody()}
-        </div>
+        <div className={styles.container_1}>
         <div className={styles.title}>
         Miku NFT Collection
         <div className={styles.description}>{numTokensMinted}/50 have been minted already!</div>
         </div>
-        
-        
+        </div>
+        <div className={styles.main}>
+        {renderBody()}
+        </div>
         </div>)
 }

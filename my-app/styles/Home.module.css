@@ -7,50 +7,30 @@
   height:100vh;
 }
 .main {
-  min-height: 90vh;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column-reverse;
   align-items: center;
+  min-height: 30vh;
 }
 .description {
   font-size: 50px;
   font-family: Monofett;
   color: white;
+}
+
+.container_1{
+display: flex;
+justify-content: flex-end;
+}
+.container_2{
   
 }
 .title{
-  min-height: 90vh;
-  position: absolute;
-  top: 40px;
- left: 1300px;
   font-size: 80px;
   font-family: Monofett;
   color: rgb(255, 196, 196);
 }
 
-.button {
-  
-  border-radius: 4px;
-  background-color: rgb(255, 196, 196);
-  border: none;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 20px;
-  width: 200px;
-  cursor: pointer;
-  margin-bottom: 2%;
-  
-}
-@media (max-width: 1000px) {
-  .main {
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-}
 
 
 .button3 {
@@ -72,6 +52,7 @@
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  
 }
 
 .button3:hover {
@@ -79,8 +60,3 @@
   transition-duration: .1s;
 }
 
-@media (min-width: 768px) {
-  .button-36 {
-    padding: 0 2.6rem;
-  }
-}
